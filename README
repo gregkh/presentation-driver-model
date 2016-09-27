@@ -1,0 +1,13 @@
+This is a repo containing a presentation given at the Kernel Recipes
+2016 conference about the Linux driver model:
+	https://kernel-recipes.org/en/2016/talks/the-linux-driver-model/
+
+The presentation is licensed under the Creative Commons
+"Attribution-Noncommercial-ShareAlike" license, version 4.0, that can be
+found in detail at:
+	http://creativecommons.org/licenses/by-nc-sa/4.0/
+
+If you have any questions about the information in this presentation,
+please feel free to contact me:
+	Greg Kroah-Hartman
+	greg@kroah.com
