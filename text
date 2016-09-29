@@ -6,16 +6,17 @@ we needed to solve power management suspend/resume
 
 Pat Mochel and I worked on this
 
-
-struct device
-
-	all types of "devices" in the kernel get this structure
-	automatic reference counting
-	associated with a specific "bus" or "subsystem/class"
+Almost no one ever needs to know any of this information in order to write a
+driver for any specific device subsystem.
 
 
 
 Bottom up
+
+kref
+	reference counting
+	lock has to be outside of the object
+	has to have a release function to free the object
 
 kobjects
 	reference counting
@@ -25,12 +26,43 @@ kobjects
 	hotplug event handling
 
 
-kref
-	reference counting
-	lock has to be outside of the object
-	has to have a release function to free the object
+attributes
+	- sysfs files for kobjects.
+	- one value per file!
+	- binary files for data the kernel does not touch
+	- grouped together, almost never handle an attribute on its own.
+
+kset
+	a set of kobjects of the same "type" that belong to the same subsystem
+	how you group kobjects together
+
+kobj_type
+	handles the release function for the kobject
+	handles the sysfs functions for the kobject
+	handles the namespace issues for the kobject (networking)
 
 
-ktype
-s
+
+
+struct device
+
+	all types of "devices" in the kernel get this structure
+	automatic reference counting
+	associated with a specific "bus" or "subsystem/class"
+
+
+
+struct device_type
+	- handles devices that need to be grouped togeher on a bus, yet are
+	  different in some way
+	USB
+		devices, interfaces, endpoints, ports
+		all are handled by the USB "bus" logic
+
+
+struct bus_type
+	how you group devices together
+	how drivers and devices for your bus match
+	uevent handling
+	shutdown handling for all bus devices
 
