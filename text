@@ -1,0 +1,36 @@
+Linux driver model
+
+2.4 all driver subsystems were isolated
+we needed to solve power management suspend/resume
+	device naming
+
+Pat Mochel and I worked on this
+
+
+struct device
+
+	all types of "devices" in the kernel get this structure
+	automatic reference counting
+	associated with a specific "bus" or "subsystem/class"
+
+
+
+Bottom up
+
+kobjects
+	reference counting
+	sysfs representation
+	data structure glue
+		links between different kobjects and types of kobjects
+	hotplug event handling
+
+
+kref
+	reference counting
+	lock has to be outside of the object
+	has to have a release function to free the object
+
+
+ktype
+s
+
