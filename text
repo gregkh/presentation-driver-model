@@ -43,7 +43,6 @@ kobj_type
 
 
 
-
 struct device
 
 	all types of "devices" in the kernel get this structure
@@ -119,7 +118,7 @@ devices are associated with a class
 	- will handle /dev creation for you
 
 Work a class has to do:
-	- class_create()
+	- class_create() or class_register()
 	- reserve major/minor
 	- use in device_create()
 	- device_destroy()
@@ -133,3 +132,29 @@ shutdown:
 	- if a device has a class, and class has shutdown, call it
 	- if a device has a bus, and the bus has shutdown, call it
 		- the bus will call a driver suspend if it has it.
+
+
+Hints for driver writers:
+	- never deal with attributes individually
+		use attribute groups
+		have your bus create/destroy them
+			- if it doesn't, something is almost always buggy
+	- should never need to call any driver core functions, and never ever any sysfs calls
+		- sysfs_notify() - rare but needed for sysfs files that have changed state
+
+
+for class writers:
+	- use attribute groups
+	- no sysfs files, use class_create()
+
+for bus writers:
+	- my apologies, it should be easier :(
+
+For people wanting to just use sysfs:
+	- don't.
+	- really do not
+	- no driver subsystem already?
+	- please do not.
+	- read the documentation
+	- read it again
+	- expect very tough review cycle
