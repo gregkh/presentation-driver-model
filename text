@@ -60,9 +60,76 @@ struct device_type
 		all are handled by the USB "bus" logic
 
 
-struct bus_type
-	how you group devices together
-	how drivers and devices for your bus match
-	uevent handling
-	shutdown handling for all bus devices
+struct device_driver
+	- controls a specific type of device
+	- probe/remove
+	- shutdown/suspend/resume
+	- default attributes
 
+
+
+struct bus_type
+	- how you group devices and drivers together
+	- how drivers and devices for your bus match
+	- uevent handling
+	- shutdown handling for all bus devices
+
+
+
+
+Work that a bus needs to do:
+	register a bus_type
+	create a device
+		set the bus type to ours
+		set up the parent pointer
+		set up default sysfs attribute groups
+		device_initialize()
+		whatever else you need/want
+		device_add()
+
+		device_register() - init and add
+
+	registering a driver
+		set the bus type to ours
+		set the probe/remove functions
+		set up module ownership
+		driver_register()
+
+	suspend/resume
+		if driver has suspend/resume, call it
+
+
+
+Simplest bus = 300 lines code
+
+
+struct class
+	- my finest moment
+	- user-visable types of devices
+		- input, gpio, pwm, misc, tty, block
+		- usually a device node
+	- how is this not a bus!
+		- it is, kind of, well, not really...
+	- suspend/resume
+	- release
+	- default attributes
+
+devices are associated with a class
+	- device_create()
+	- will handle /dev creation for you
+
+Work a class has to do:
+	- class_create()
+	- reserve major/minor
+	- use in device_create()
+	- device_destroy()
+	- free major/minor
+	- can handle suspend/resume
+
+classes are very easy to use, 30 lines
+
+
+shutdown:
+	- if a device has a class, and class has shutdown, call it
+	- if a device has a bus, and the bus has shutdown, call it
+		- the bus will call a driver suspend if it has it.
